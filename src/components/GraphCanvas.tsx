@@ -364,7 +364,10 @@ function GraphCanvas({ data, onBrushSelect }: GraphCanvasProps): React.JSX.Eleme
 
   useEffect(() => {
     if (!data || data.length === 0) return;
-    onResize();
+    requestAnimationFrame(() => {
+      onResize();
+      drawAll(null);
+    });
   }, [data, onResize]);
 
   useEffect(() => {

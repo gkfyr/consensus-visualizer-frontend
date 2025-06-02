@@ -15,7 +15,7 @@ export interface EventData {
 
 export function generateDummyData(): EventData[] {
   const dummyData: EventData[] = [];
-  const nodes = ["N0", "N1", "N2", "N3", "N4", "N5"];
+  const nodes = ["N0", "N1", "N2", "N3", "N4"];
   let currentTime = 1679048123401;
   const numPairs = 150;
 

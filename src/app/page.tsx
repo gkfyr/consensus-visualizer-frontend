@@ -11,14 +11,16 @@ function App(): React.JSX.Element {
   const [endTime, setEndTime] = useState<number | null>(null);
 
   useEffect(() => {
-    const d = generateDummyData();
-    console.log("Generated data length:", d.length);
-    setAllEvents(d);
+    requestAnimationFrame(() => {
+      const d = generateDummyData();
+      console.log("Generated data length:", d.length);
+      setAllEvents(d);
 
-    const minT = d.reduce((acc, cur) => Math.min(acc, cur.timestamp), Infinity);
-    const maxT = d.reduce((acc, cur) => Math.max(acc, cur.timestamp), -Infinity);
-    setStartTime(minT);
-    setEndTime(maxT);
+      const minT = d.reduce((acc, cur) => Math.min(acc, cur.timestamp), Infinity);
+      const maxT = d.reduce((acc, cur) => Math.max(acc, cur.timestamp), -Infinity);
+      setStartTime(minT);
+      setEndTime(maxT);
+    });
   }, []);
 
   const filteredData = useMemo(() => {
@@ -65,30 +67,53 @@ function App(): React.JSX.Element {
   }
 
   return (
-    <div className="App">
-      <h1>Dark Theme Consensus Visualizer (Arrows + Brush)</h1>
+    <div className="min-h-screen bg-gray-900 text-white p-6 font-sans">
+      <h1 className="text-3xl font-bold mb-6">Consensus Visualizer</h1>
 
-      <div style={{ display: "flex", alignItems: "center", marginBottom: 10 }}>
+      <div className="flex flex-wrap items-center gap-4 mb-6">
         {quickRanges.map((r) => (
-          <button key={r.value} onClick={() => handleQuickRange(r.value)}>
+          <button
+            key={r.value}
+            onClick={() => handleQuickRange(r.value)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
+          >
             {r.label}
           </button>
         ))}
 
-        <div style={{ marginLeft: 10 }}>
-          <label>Start (ms): </label>
-          <input id="startTimeInput" type="number" defaultValue={startTime ?? ""} style={{ width: 120 }} />
-          <label>End (ms): </label>
-          <input id="endTimeInput" type="number" defaultValue={endTime ?? ""} style={{ width: 120 }} />
-          <button onClick={handleSetCustomRange}>Set Range</button>
+        <div className="flex items-center gap-2">
+          <label htmlFor="startTimeInput">Start (ms):</label>
+          <input
+            id="startTimeInput"
+            type="number"
+            value={startTime ?? ""}
+            onChange={(e) => setStartTime(Number(e.target.value))}
+            className="bg-gray-800 border border-gray-600 px-2 py-1 rounded text-white w-[150px]"
+          />
+          <label htmlFor="endTimeInput">End (ms):</label>
+          <input
+            id="endTimeInput"
+            type="number"
+            value={endTime ?? ""}
+            onChange={(e) => setEndTime(Number(e.target.value))}
+            className="bg-gray-800 border border-gray-600 px-2 py-1 rounded text-white w-[150px]"
+          />
+          <button
+            onClick={handleSetCustomRange}
+            className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded"
+          >
+            Set Range
+          </button>
         </div>
       </div>
 
-      <div style={{ marginBottom: 10 }}>
+      <div className="mb-4 text-sm text-gray-300">
         <p>
-          Current range: {startTime} ~ {endTime}
+          <span className="font-semibold">Current range:</span> {startTime} ~ {endTime}
         </p>
-        <p>Filtered events: {filteredData.length}</p>
+        <p>
+          <span className="font-semibold">Filtered events:</span> {filteredData.length}
+        </p>
       </div>
 
       <GraphCanvas data={filteredData} allData={allEvents} onBrushSelect={onBrushSelect} />
