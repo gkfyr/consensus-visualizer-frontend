@@ -67,15 +67,15 @@ function App(): React.JSX.Element {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6 font-sans">
-      <h1 className="text-3xl font-bold mb-6">Consensus Visualizer</h1>
+    <div className="min-h-screen bg-black text-white p-6 font-sans">
+      <h1 className="text-3xl font-bold mb-6">CometBFT Consensus Visualizer</h1>
 
       <div className="flex flex-wrap items-center gap-4 mb-6">
         {quickRanges.map((r) => (
           <button
             key={r.value}
             onClick={() => handleQuickRange(r.value)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
+            className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded shadow"
           >
             {r.label}
           </button>
